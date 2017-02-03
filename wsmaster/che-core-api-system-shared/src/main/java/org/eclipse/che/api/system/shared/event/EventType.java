@@ -33,7 +33,7 @@ public enum EventType {
     STOPPING_SERVICE,
 
     /**
-     * Published when after service item is stopped.
+     * Published after service item is stopped.
      * Events of such type are published between {@link #STOPPING_SERVICE}
      * and {@link #SERVICE_STOPPED} events.
      */
