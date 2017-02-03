@@ -12,9 +12,13 @@ package org.eclipse.che.api.system.server;
 
 import org.eclipse.che.api.core.notification.EventService;
 import org.eclipse.che.api.core.notification.EventSubscriber;
+import org.eclipse.che.api.system.shared.dto.ServiceItemStoppedEventDto;
 import org.eclipse.che.api.system.shared.dto.SystemEventDto;
+import org.eclipse.che.api.system.shared.dto.SystemServiceEventDto;
 import org.eclipse.che.api.system.shared.dto.SystemStatusChangedEventDto;
+import org.eclipse.che.api.system.shared.event.service.ServiceItemStoppedEvent;
 import org.eclipse.che.api.system.shared.event.SystemEvent;
+import org.eclipse.che.api.system.shared.event.service.SystemServiceEvent;
 import org.eclipse.che.api.system.shared.event.SystemStatusChangedEvent;
 import org.eclipse.che.dto.server.DtoFactory;
 import org.everrest.websockets.WSConnectionContext;
@@ -59,6 +63,21 @@ public class SystemEventsWebsocketBroadcaster implements EventSubscriber<SystemE
                                  .withStatus(statusChanged.getStatus())
                                  .withPrevStatus(statusChanged.getPrevStatus())
                                  .withType(statusChanged.getType());
+            case SERVICE_STOPPED:
+            case STOPPING_SERVICE:
+                SystemServiceEvent serviceEvent = (SystemServiceEvent)event;
+                return DtoFactory.newDto(SystemServiceEventDto.class)
+                                 .withService(serviceEvent.getServiceName())
+                                 .withType(serviceEvent.getType());
+            case SERVICE_ITEM_STOPPED:
+                ServiceItemStoppedEvent itemStoppedEvent = (ServiceItemStoppedEvent)event;
+                return DtoFactory.newDto(ServiceItemStoppedEventDto.class)
+                                 .withItem(itemStoppedEvent.getItem())
+                                 .withCurrent(itemStoppedEvent.getCurrent())
+                                 .withTotal(itemStoppedEvent.getTotal())
+                                 .withService(itemStoppedEvent.getServiceName())
+                                 .withType(itemStoppedEvent.getType());
+
             default:
                 throw new IllegalArgumentException("Can't convert event of type '" + event.getType() + "' to DTO");
         }
