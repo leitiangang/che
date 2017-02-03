@@ -5,11 +5,12 @@ import org.eclipse.che.api.system.shared.event.service.StoppingSystemServiceEven
 import org.eclipse.che.api.system.shared.event.service.SystemServiceStoppedEvent;
 
 /**
- * Defines a termination process for a certain service.
+ * Defines an interface for implementing termination
+ * process for a certain service.
  *
  * @author Yevhenii Voevodin
  */
-public interface ServiceTermination {
+interface ServiceTermination {
 
     /**
      * Terminates a certain service.
